@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,6 +15,9 @@ public class EnemyAi : MonoBehaviour
     public GameObject enemyBullet;
     public Transform spawnPoint;
     public float enemySpeed;
+
+    public float velocity;
+
     
     void Start()
     {
@@ -23,7 +27,7 @@ public class EnemyAi : MonoBehaviour
     
     void Update()
     {
-        // enemy.SetDestination(player.position);
+       
         ShootAtPlayer();
     }
 
@@ -41,5 +45,10 @@ public class EnemyAi : MonoBehaviour
         Destroy(bulletObj, 5f);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        velocity = 0;
+    }
+    
     
 }
