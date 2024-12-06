@@ -11,14 +11,14 @@ public class FollowScript : MonoBehaviour
     public float MoveSpeed = 4;
     int MinDist = 10;
 
-    // public GameObject enemey;
-    // public string enemyAi.cs;
+    private bool isAttacking = false;
 
-    // public enemyAI enemyScript;
+    // public GameObject enemey;
+
 
     void Start()
     {
-        // (enemy. GetComponent(scr) as MonoBehaviour).enabled = false;
+
     }
 
     void Update()
@@ -27,11 +27,9 @@ public class FollowScript : MonoBehaviour
      
 
         transform.LookAt(Player);
-        // enemyScript.enabled=false;
 
-        if (Vector3.Distance(transform.position, Player.position) <= MinDist)
+        if (Vector3.Distance(transform.position, Player.position) <= MinDist && isAttacking == false)
         {
-            // (enemyAi.GetComponent(scr) as MonoBehaviour).enabled = true;
             this.gameObject.GetComponent<EnemyAi>().enabled=true;
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
             
@@ -40,5 +38,21 @@ public class FollowScript : MonoBehaviour
             this.gameObject.GetComponent<EnemyAi>().enabled=false;
         }
         
+    }
+
+    private void OnTriggerEnter(Collider other) {
+
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Ouchie");
+            isAttacking = true;
+        }
+    }
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("No Ouchie");
+            isAttacking = false;
+        }
     }
 }
