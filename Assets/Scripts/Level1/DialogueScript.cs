@@ -8,14 +8,7 @@ public class DialogueScript : MonoBehaviour
     public TextMeshProUGUI textComponent;
     public string[] lines;
     public int index;
-    // Start is called before the first frame update
-    void Start()
-    {
-        textComponent.text = string.Empty;
-        StartDialogue();
-    }
 
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetMouseButtonDown(0))
@@ -41,5 +34,11 @@ public class DialogueScript : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+    }
+    public void StartDialogueWindow()
+    {
+        gameObject.SetActive(true);
+        textComponent.text = string.Empty;
+        StartDialogue();
     }
 }
