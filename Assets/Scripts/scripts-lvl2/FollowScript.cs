@@ -13,12 +13,14 @@ public class FollowScript : MonoBehaviour
 
     private bool isAttacking = false;
 
+    private Animator animator;
+
     // public GameObject enemey;
 
 
     void Start()
     {
-
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -32,10 +34,12 @@ public class FollowScript : MonoBehaviour
         {
             this.gameObject.GetComponent<EnemyAi>().enabled=true;
             transform.position += transform.forward * MoveSpeed * Time.deltaTime;
+            animator.SetBool("IsAttacking", true);
             
 
         }else{
             this.gameObject.GetComponent<EnemyAi>().enabled=false;
+            animator.SetBool("IsAttacking", false);
         }
         
     }
