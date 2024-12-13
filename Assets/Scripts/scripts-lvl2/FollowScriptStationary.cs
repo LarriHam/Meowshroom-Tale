@@ -50,15 +50,18 @@ public class FollowScriptStationary : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            GameManager.health -= 1;
             Debug.Log("Ouchie");
             isAttacking = true;
         }
     }
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player"))
-        {
+        {                                  
             Debug.Log("No Ouchie");
             isAttacking = false;
         }
+
+        
     }
 }

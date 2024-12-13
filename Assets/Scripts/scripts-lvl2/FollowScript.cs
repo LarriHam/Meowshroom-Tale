@@ -48,6 +48,7 @@ public class FollowScript : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            GameManager.health -= 1;
             Debug.Log("Ouchie");
             isAttacking = true;
         }
