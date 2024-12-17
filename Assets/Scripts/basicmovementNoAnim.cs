@@ -2,22 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class basicmovementNoAnim: MonoBehaviour
+public class MovementScript: MonoBehaviour
 {
     public float speed;
     public float rotationSpeed;
-   
-    //v4 jump
+
     public float jumpSpeed;
     private float ySpeed;
     private float originalStepOffset;
 
     //v5 - improve jump
     public float jumpButtonGracePeriod;
-    private float? lastGroundedTime; //nullable floattype
+    private float? lastGroundedTime;
     private float? jumpButtonPressedTime;
 
     private CharacterController characterController;
+
+    private Animator animator;
+
+    [SerializeField]
+    private Transform cameraTransform;
+
+    private bool isJumping;
+    private bool isGrounded;
     
     
     void Start() {
@@ -25,6 +32,7 @@ public class basicmovementNoAnim: MonoBehaviour
         characterController = GetComponent<CharacterController>();
         //v4 jump
         originalStepOffset = characterController.stepOffset;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -35,6 +43,8 @@ public class basicmovementNoAnim: MonoBehaviour
 
         Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
         float magnitude = Mathf.Clamp01(movementDirection.magnitude) * speed;
+        
+        movementDirection = Quaternion.AngleAxis(cameraTransform.rotation.eulerAngles.y, Vector3.up) * movementDirection;
         //Normalize diretion vector so that it has a range of 0-1
         movementDirection.Normalize();
 
@@ -60,6 +70,12 @@ public class basicmovementNoAnim: MonoBehaviour
 
             characterController.stepOffset = originalStepOffset;//reset characterController stepOffset
             ySpeed = -0.5f;  //reset ySpeed 
+
+            animator.SetBool("IsWalking", true);
+            animator.SetBool("IsJumping", false);
+            animator.SetBool("IsFalling", false);
+            isGrounded = true;
+            isJumping = false;
             //v5. improve jump. replace  Input.GetButtonDown("Jump")
             if (Time.time - jumpButtonPressedTime <= jumpButtonGracePeriod)
             {
@@ -68,17 +84,26 @@ public class basicmovementNoAnim: MonoBehaviour
                 // in order to avoid multiple jumps inside gracePeriod
                 jumpButtonPressedTime = null;
                 lastGroundedTime = null;
+                animator.SetBool("IsJumping", true);
+                isJumping = true;
             }
         }
         else
         {
             characterController.stepOffset = 0;
+            animator.SetBool("IsWalking", false);
+            isGrounded = false;
+
+            if ((isJumping && ySpeed <0) || ySpeed < -2)
+            {
+                animator.SetBool("IsFalling", true);
+            }
         }
 
         // v4 - Jump. Local var vector3 velocity
         // add ySpeed to velocity
         Vector3 velocity = movementDirection * magnitude;
-       velocity.y = ySpeed;
+        velocity.y = ySpeed;
        //Time.deltaTime is  required for the charControll Move method
        characterController.Move(velocity * Time.deltaTime);
 
@@ -87,10 +112,23 @@ public class basicmovementNoAnim: MonoBehaviour
         if (movementDirection != Vector3.zero)
         {
             //changes character to point in direction of movement. 
-         
+            animator.SetBool("IsWalking", true);
             Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
             
+        }
+        else
+        {
+            animator.SetBool("IsWalking", false);
+        }
+    }
+    private void OnAnimatorMove()
+    {
+        if (isGrounded)
+        {
+            Vector3 velocity = animator.deltaPosition;
+            velocity.y = ySpeed * Time.deltaTime;
+            characterController.Move(velocity);
         }
     }
 }
