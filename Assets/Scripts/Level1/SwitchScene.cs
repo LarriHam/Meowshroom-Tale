@@ -7,6 +7,7 @@ public class SwitchScene : MonoBehaviour
 {
     private bool playerInTrigger = false;
     public GameObject instructionE;
+    public GameObject transition;
 
     // Update is called once per frame
     void Update()
@@ -15,7 +16,7 @@ public class SwitchScene : MonoBehaviour
         {
             if(Input.GetKeyDown("e"))
             {
-                SceneManager.LoadScene(sceneBuildIndex:1);
+                transition.GetComponent<LevelLoader>().LoadNextLevel();
             }
         }
     }
