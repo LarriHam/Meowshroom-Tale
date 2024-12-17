@@ -20,4 +20,13 @@ public class CollectibleCountHealth : MonoBehaviour
         text.text = (++count).ToString();
     }
 
+    public void OnCollectibleUsed()
+    {
+        text.text = (--count).ToString();
+    }
+
+    public int CollectibleCount()
+    {
+        return count;
+    }
 }

@@ -11,6 +11,14 @@ public class LevelLoader : MonoBehaviour
     {
         StartCoroutine(LoadLevel(SceneManager.GetActiveScene().buildIndex + 1));
     }
+    public void LoadMainMenu()
+    {
+        StartCoroutine(LoadLevel(0));
+    }
+    public void LoadCongratsScreen()
+    {
+        StartCoroutine(LoadLevel(3));
+    }
 
     IEnumerator LoadLevel(int levelIndex)
     {

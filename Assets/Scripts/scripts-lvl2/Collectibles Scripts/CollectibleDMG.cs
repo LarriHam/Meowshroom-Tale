@@ -11,7 +11,10 @@ public class CollectibleDMG : MonoBehaviour
     Vector3 initPos;
     public float rotY = 1f;
 
+    private float timeCount = 0.3f;
+
     public static event Action OnCollected;
+    public AudioSource collectSound;
     
     void Start()
     {
@@ -32,7 +35,14 @@ public class CollectibleDMG : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             OnCollected?.Invoke();
-            Destroy(gameObject);
+            collectSound.Play();
+            StartCoroutine(DestroyAfterTime());
         }
     }
+
+    IEnumerator DestroyAfterTime()
+    {
+        yield return new WaitForSeconds(timeCount);
+        Destroy(this.gameObject);
+    }   
 }
