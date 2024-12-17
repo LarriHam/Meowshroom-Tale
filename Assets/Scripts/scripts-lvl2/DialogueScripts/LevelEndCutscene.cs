@@ -5,6 +5,7 @@ using UnityEngine;
 public class LevelEndCutscene : MonoBehaviour
 {
     public GameObject dialogueWindow;
+    private bool entered = false;
     public GameObject mushroomCountHeal;
     public GameObject mushroomCountDMG;
     private string[] newLines1 = {"Oh! You're here, Mushy!", 
@@ -34,32 +35,36 @@ public class LevelEndCutscene : MonoBehaviour
     // Start is called before the first frame update
     void OnTriggerEnter()
     {
-        Time.timeScale = 0;
-        if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() < mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount())
+        if (!entered)
         {
-            dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines3;
-            dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites3;
+            Time.timeScale = 0;
+            if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() < mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount())
+            {
+                dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines3;
+                dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites3;
+            }
+            if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() > mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount())
+            {
+                dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines2;
+                dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites2;
+            }
+            if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() == mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount())
+            {
+                dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines4;
+                dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites4;
+            }
+            if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() == 0 && mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount() == 0)
+            {
+                dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines1;
+                dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites1;
+            }
+            if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() + mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount() >= 1 && mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() + mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount() <= 2)
+            {
+                dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines5;
+                dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites5;
+            }
+            dialogueWindow.GetComponent<DialogueWithWitch>().StartDialogueWindow();
+            entered = true;
         }
-        if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() > mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount())
-        {
-            dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines2;
-            dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites2;
-        }
-        if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() == mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount())
-        {
-            dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines4;
-            dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites4;
-        }
-        if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() == 0 && mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount() == 0)
-        {
-            dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines1;
-            dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites1;
-        }
-        if(mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() + mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount() >= 1 && mushroomCountHeal.GetComponent<CollectibleCountHealth>().CollectibleCount() + mushroomCountDMG.GetComponent<CollectibleCountDMG>().CollectibleCount() <= 2)
-        {
-            dialogueWindow.GetComponent<DialogueWithWitch>().lines = newLines5;
-            dialogueWindow.GetComponent<DialogueWithWitch>().sprites = newSprites5;
-        }
-        dialogueWindow.GetComponent<DialogueWithWitch>().StartDialogueWindow();
     }
 }
